@@ -5,7 +5,7 @@ public class Mover : MonoBehaviour
 {
     [SerializeField] private Transform _target;
     private NavMeshAgent _navAgent;
-    
+
     private void Awake()
     {
         _navAgent = GetComponent<NavMeshAgent>();
@@ -13,6 +13,20 @@ public class Mover : MonoBehaviour
 
     private void Update()
     {
-        _navAgent.SetDestination(_target.position);
+        if (Input.GetMouseButtonDown(0))
+        {
+            MoveToCursor();
+        }
+    }
+
+    private void MoveToCursor()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            _navAgent.SetDestination(hit.point);
+        }
     }
 }
