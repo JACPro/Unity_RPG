@@ -5,10 +5,12 @@ public class Mover : MonoBehaviour
 {
     [SerializeField] private Transform _target;
     private NavMeshAgent _navAgent;
+    private Animator _animator;
 
     private void Awake()
     {
         _navAgent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -17,6 +19,15 @@ public class Mover : MonoBehaviour
         {
             MoveToCursor();
         }
+
+        UpdateAnimator();
+    }
+
+    private void UpdateAnimator()
+    {
+        Vector3 globalVelocity = _navAgent.velocity;
+        Vector3 localVelocity = transform.InverseTransformDirection(globalVelocity);
+        _animator.SetFloat("ForwardSpeed", localVelocity.magnitude);
     }
 
     private void MoveToCursor()
